@@ -14,6 +14,31 @@ symbol_count = {
     'D': 10,
 }
 
+symbol_values = {
+    'A': 5,
+    'B': 4,
+    'C': 3,
+    'D': 2,
+}
+
+
+def check_winnings(slots, lines, bet, values):
+    winnings = 0
+    winning_lines = []
+    # Check horizontal lines
+    for line in range(lines):
+        # Check if all symbols in the line are the same
+        symbol = slots[0][line]
+        for col in slots:
+            symbol_check = col[line]
+            if symbol != symbol_check:
+                break
+        else:
+            winnings += values[symbol] * bet
+            winning_lines.append(line +1)
+            
+    return winnings, winning_lines
+
 def get_slot_spins(rows, cols, symbols):
     all_symbols = []
     for symbol, symbol_count in symbols.items():
@@ -109,8 +134,11 @@ def main():
             
     print(f'Your are betting on {lines} lines with ${bet} on each line. Your total bet is: ${total_bet}')
     
+    slots = get_slot_spins(ROWS, COLS, symbol_count)
+    print_slots(slots)
+    winning, winning_lines = check_winnings(slots, lines, bet, symbol_values)
+    print(f'You won ${winning}.')
+    print(f'You won on line:', *winning_lines)
+
        
 main()
-
-slots = get_slot_spins(ROWS, COLS, symbol_count)
-print_slots(slots)
